@@ -456,7 +456,7 @@
                             data-bs-toggle="collapse" data-bs-target="#navblog" aria-expanded="false"
                             aria-controls="navblog">
                             <i data-feather="edit" class="nav-icon me-2 icon-xxs">
-                            </i> Blog
+                            </i> Tin tức
                         </a>
 
                         <div id="navblog" class="collapse  show "
@@ -465,34 +465,24 @@
 
                                 <li class="nav-item">
                                     <a class="nav-link has-arrow  active "
-                                        href="blog-author.html">
-
-                                        Author
+                                        href="{{route('admin.category-news')}}">
+                                        Danh mục
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link has-arrow "
-                                        href="blog-author-detail.html">
-
-                                        Detail
+                                        href="{{route('admin.news')}}">
+                                        Tin tức
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link has-arrow "
-                                        href="create-blog-post.html">
-
-                                        Create Post
-                                    </a>
-                                </li>
+                               
                             </ul>
                         </div>
                     </li>
-
                     <!-- Nav item -->
                     <li class="nav-item">
                         <div class="navbar-heading">Layouts & Pages</div>
                     </li>
-
                     <li class="nav-item ">
                         <a
                             class="nav-link   collapsed  "

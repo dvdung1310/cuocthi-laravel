@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Codescandy">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-M8S4MT3EYG"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -20,7 +21,18 @@
     <link rel="stylesheet" href="{{asset('assets/css/theme.min.css')}}">
     <title>Blog Author | Dash UI - Bootstrap 5 Admin Dashboard Template</title>
 </head>
-
+<style>
+    #alert-message {
+        opacity: 0;
+        transition: opacity 1s ease-in-out; /* 1 giây để hiện ra và ẩn đi */
+        visibility: hidden;
+    }
+    
+    #alert-message.show {
+        opacity: 1;
+        visibility: visible;
+    }
+    </style>
 <body>
     <main id="main-wrapper" class="main-wrapper">
         <!-- header -->
@@ -46,12 +58,26 @@
 
     <!-- Theme JS -->
     <script src="{{asset('assets/js/theme.min.js')}}"></script>
+    <script src="{{asset('assets/js/slug.js')}}"></script>
     <!-- popper js -->
     <script src="{{asset('assets/libs/%40popperjs/core/dist/umd/popper.min.js')}}"></script>
     <!-- tippy js -->
     <script src="{{asset('assets/libs/tippy.js/dist/tippy-bundle.umd.min.js')}}"></script>
     <script src="{{asset('assets/js/vendors/tooltip.js')}}"></script>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Lấy phần tử thông báo
+            var alertMessage = document.getElementById('alert-message');
+    
+            // Nếu phần tử tồn tại, đặt timeout để ẩn nó
+            if (alertMessage) {
+                setTimeout(function () {
+                    alertMessage.style.opacity = '0'; // Làm mờ dần
+                    setTimeout(() => alertMessage.remove(), 500); // Xoá sau khi mờ dần
+                }, 5000); // 5 giây
+            }
+        });
+    </script>
 </body>
 
 </html>
