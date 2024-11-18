@@ -48,11 +48,11 @@
           <!-- Card body -->
           <div class="card-body p-6">
             <div class="mb-4">
-              <!-- <a href="../index.html"><img src="../assets/images/brand/logo/logo-2.svg" class="mb-2 text-inverse" alt="Image"></a> -->
               <p class="mb-6">Đăng nhập</p>
             </div>
             <!-- Form -->
-            <form>
+            <form method="POST" action="{{ route('admin.login.submit') }}">
+            @csrf
               <!-- Username -->
               <div class="mb-3">
                 <label for="email" class="form-label">Tài khoản</label>
@@ -88,10 +88,6 @@
 <script src="{{asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{asset('assets/libs/feather-icons/dist/feather.min.js')}}"></script>
 <script src="{{asset('assets/libs/simplebar/dist/simplebar.min.js')}}"></script>
-
-
-
-
 <!-- Theme JS -->
 <script src="{{asset('assets/js/theme.min.js')}}"></script>
 </body>

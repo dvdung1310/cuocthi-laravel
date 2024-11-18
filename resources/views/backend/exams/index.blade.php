@@ -1,369 +1,257 @@
 @extends('backend.dashboard')
 @section('content')
 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-12">
-                            <!-- Page header -->
-                            <div class="d-flex justify-content-between align-items-center mb-5">
-                                <h3 class="mb-0 ">Author</h3>
-                                <a href="#!" class="btn btn-primary">Button</a>
+    @if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <h3 class="mb-0 ">Danh sách bài thi</h3>
+                <!-- Button to trigger modal -->
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createExamModal">Thêm mới cuộc thi trắc nghiệm</button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="createExamModal" tabindex="-1" aria-labelledby="createExamModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createExamModalLabel">Thêm mới cuộc thi trắc nghiệm</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('admin.exams.store') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Tên cuộc thi</label>
+                                            <input type="text" class="form-control" id="name" name="name" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="description" class="form-label">Mô tả</label>
+                                            <textarea class="form-control" id="description" name="description"></textarea>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label for="start_date" class="form-label">Ngày bắt đầu</label>
+                                            <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label for="start_time" class="form-label">Giờ bắt đầu</label>
+                                            <input type="time" class="form-control" id="start_time" name="start_time" required>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label for="end_date" class="form-label">Ngày kết thúc</label>
+                                            <input type="date" class="form-control" id="end_date" name="end_date" required>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label for="end_time" class="form-label">Giờ kết thúc</label>
+                                            <input type="time" class="form-control" id="end_time" name="end_time" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="image" class="form-label">Hình ảnh</label>
+                                            <input type="file" class="form-control" id="image" name="image">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="status" class="form-label">Trạng thái</label>
+                                            <select class="form-control" id="status" name="status" required>
+                                                <option value="1">Hoạt động</option>
+                                                <option value="0">Ngừng hoạt động</option>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="submit" class="btn btn-primary">Thêm mới</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    <div class="row">
-                        <div class="col-lg-12 ">
-                            <div class="card h-100">
-                                <div class="card-header d-md-flex justify-content-between align-items-center">
+    <div class="row">
+        <div class="col-lg-12 ">
+            <div class="card h-100">
+                <div class="card-header d-md-flex justify-content-between align-items-center">
 
-                                    <form>
-                                        <div class="mb-3 mb-md-0">
-                                            <input type="search" class="form-control" placeholder="Search Author">
+                    <form>
+                        <div class="mb-3 mb-md-0">
+                            <input type="search" class="form-control" placeholder="Search Author">
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive table-card">
+                        <table class="table mb-0 text-nowrap table-centered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Id đề</th>
+                                    <th scope="col">Tên đề thi</th>
+                                    <th scope="col">Hình ảnh</th>
+                                    <th scope="col">Ngày bắt đầu</th>
+                                    <th scope="col">Ngày kết thúc</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($exams as $exam)
+                                <tr>
+                                    <td>{{ $exam->id }}</td>
+                                    <td>{{ $exam->name }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            @if($exam->image)
+                                            <img src="{{ asset('storage/'.$exam->image) }}" alt="Image" class="avatar avatar-sm rounded-circle">
+                                            @else
+                                            Không có ảnh
+                                            @endif
+
                                         </div>
-                                    </form>
-                                    <a href="#!" class="btn btn-primary">Add New Author</a>
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($exam->start_date . ' ' . $exam->start_time)->format('d/m/Y H:i:s') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($exam->end_date . ' ' . $exam->end_time)->format('d/m/Y H:i:s') }}</td>
+                                    <td>
+                                        <span class="badge {{ $exam->status == '1' ? 'badge-success-soft' : 'badge-danger-soft' }} rounded-pill">
+                                            {{ $exam->status == '1' ? 'Đang mở' : 'Đã đóng' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-ghost btn-icon btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#editExamModal{{ $exam->id }}">
+                                            <i data-feather="edit" class="icon-xs"></i>
+                                        </button>
 
+                                        <a class="btn btn-ghost btn-icon btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $exam->id }}">
+                                            <i data-feather="trash" class="icon-xs"></i>
+                                        </a>
+                                    </td>
+                                </tr>
 
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive table-card">
-                                        <table class="table mb-0 text-nowrap table-centered">
-                                            <thead class="table-light">
-                                                <tr>
-                                                    <th scope="col">Author Name</th>
-                                                    <th scope="col">Date Join</th>
-                                                    <th scope="col">Total Post </th>
-                                                    <th scope="col">Total Followers</th>
-                                                    <th scope="col">Payment </th>
-                                                    <th scope="col">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <img src="../assets/images/avatar/avatar-11.jpg" alt="Image" class="avatar avatar-sm rounded-circle">
-                                                            <div class="ms-2">
-                                                                <h5 class="mb-0"><a href="#!" class="text-inherit">Bert Schultz</a></h5>
-                                                            </div>
+                                <!-- model sửa -->
+                                <div class="modal fade" id="editExamModal{{ $exam->id }}" tabindex="-1" aria-labelledby="editExamModalLabel{{ $exam->id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editExamModalLabel{{ $exam->id }}">Chỉnh sửa đề thi</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- Form chỉnh sửa -->
+                                                <form action="{{ route('admin.exams.update', $exam->id) }}" method="POST" enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="row">
+                                                        <div class="mb-3">
+                                                            <label for="name" class="form-label">Tên đề thi</label>
+                                                            <input type="text" class="form-control" id="name" name="name" value="{{ $exam->name }}" required>
                                                         </div>
 
-                                                    </td>
-                                                    <td>03 Oct 2023</td>
-                                                    <td>345</td>
-
-                                                    <td>3,465</td>
-                                                    <td><span class="badge badge-success-soft rounded-pill">Paid</span></td>
-                                                    <td>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="mailOne">
-                                                            <i data-feather="mail" class="icon-xs"></i>
-                                                            <div id="mailOne" class="d-none">
-                                                                <span>Mail</span>
-                                                            </div>
-                                                        </a>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="lockOne">
-                                                            <i data-feather="lock" class="icon-xs"></i>
-                                                            <div id="lockOne" class="d-none">
-                                                                <span>Block</span>
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <img src="../assets/images/avatar/avatar-2.jpg" alt="Image" class="avatar avatar-sm rounded-circle">
-                                                            <div class="ms-2">
-                                                                <h5 class="mb-0"><a href="#!" class="text-inherit">Christian Hart</a></h5>
-                                                            </div>
+                                                        <div class="mb-3 col-md-6">
+                                                            <label for="start_date" class="form-label">Ngày bắt đầu</label>
+                                                            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $exam->start_date }}" required>
                                                         </div>
 
-                                                    </td>
-                                                    <td>19 Sept 2023</td>
-                                                    <td>34</td>
-
-                                                    <td>15,467</td>
-                                                    <td><span class="badge badge-success-soft rounded-pill">Paid</span></td>
-                                                    <td>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="mailTwo">
-                                                            <i data-feather="mail" class="icon-xs"></i>
-                                                            <div id="mailTwo" class="d-none">
-                                                                <span>Mail</span>
-                                                            </div>
-                                                        </a>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="lockTwo">
-                                                            <i data-feather="lock" class="icon-xs"></i>
-                                                            <div id="lockTwo" class="d-none">
-                                                                <span>Block</span>
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <img src="../assets/images/avatar/avatar-3.jpg" alt="Image" class="avatar avatar-sm rounded-circle">
-                                                            <div class="ms-2">
-                                                                <h5 class="mb-0"><a href="#!" class="text-inherit">Kimberly Barnes</a></h5>
-                                                            </div>
+                                                        <div class="mb-3 col-md-6">
+                                                            <label for="start_time" class="form-label">Giờ bắt đầu</label>
+                                                            <input type="time" class="form-control" id="start_time" name="start_time" value="{{ $exam->start_time }}" required>
                                                         </div>
 
-                                                    </td>
-                                                    <td>04 Sept 2023</td>
-                                                    <td>65</td>
-
-                                                    <td>7,567</td>
-                                                    <td><span class="badge badge-success-soft rounded-pill">Paid</span></td>
-                                                    <td>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="mailThree">
-                                                            <i data-feather="mail" class="icon-xs"></i>
-                                                            <div id="mailThree" class="d-none">
-                                                                <span>Mail</span>
-                                                            </div>
-                                                        </a>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="lockThree">
-                                                            <i data-feather="lock" class="icon-xs"></i>
-                                                            <div id="lockThree" class="d-none">
-                                                                <span>Block</span>
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <img src="../assets/images/avatar/avatar-4.jpg" alt="Image" class="avatar avatar-sm rounded-circle">
-                                                            <div class="ms-2">
-                                                                <h5 class="mb-0"><a href="#!" class="text-inherit">Alejandro Burdette</a></h5>
-                                                            </div>
+                                                        <div class="mb-3 col-md-6">
+                                                            <label for="end_date" class="form-label">Ngày kết thúc</label>
+                                                            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $exam->end_date }}" required>
                                                         </div>
 
-                                                    </td>
-                                                    <td>23 Aug 2023</td>
-                                                    <td>76</td>
-
-                                                    <td>8,478</td>
-                                                    <td><span class="badge badge-success-soft rounded-pill">Paid</span></td>
-                                                    <td>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="mailFour">
-                                                            <i data-feather="mail" class="icon-xs"></i>
-                                                            <div id="mailFour" class="d-none">
-                                                                <span>Mail</span>
-                                                            </div>
-                                                        </a>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="lockFour">
-                                                            <i data-feather="lock" class="icon-xs"></i>
-                                                            <div id="lockFour" class="d-none">
-                                                                <span>Block</span>
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <img src="../assets/images/avatar/avatar-5.jpg" alt="Image" class="avatar avatar-sm rounded-circle">
-                                                            <div class="ms-2">
-                                                                <h5 class="mb-0"><a href="#!" class="text-inherit">Charles Pope</a></h5>
-                                                            </div>
+                                                        <div class="mb-3 col-md-6">
+                                                            <label for="end_time" class="form-label">Giờ kết thúc</label>
+                                                            <input type="time" class="form-control" id="end_time" name="end_time" value="{{ $exam->end_time }}" required>
                                                         </div>
 
-                                                    </td>
-                                                    <td>16 Aug 2023</td>
-                                                    <td>126</td>
-
-                                                    <td>4,345
-                                                    </td>
-                                                    <td><span class="badge badge-success-soft rounded-pill">Paid</span></td>
-                                                    <td>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="mailFive">
-                                                            <i data-feather="mail" class="icon-xs"></i>
-                                                            <div id="mailFive" class="d-none">
-                                                                <span>Mail</span>
-                                                            </div>
-                                                        </a>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="lockFive">
-                                                            <i data-feather="lock" class="icon-xs"></i>
-                                                            <div id="lockFive" class="d-none">
-                                                                <span>Block</span>
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <img src="../assets/images/avatar/avatar-6.jpg" alt="Image" class="avatar avatar-sm rounded-circle">
-                                                            <div class="ms-2">
-                                                                <h5 class="mb-0"><a href="#!" class="text-inherit">Tabitha Ewing</a></h5>
-                                                            </div>
+                                                        <div class="mb-3">
+                                                            <label for="status" class="form-label">Trạng thái</label>
+                                                            <select class="form-select" id="status" name="status" required>
+                                                                <option value="1" {{ $exam->status == 1 ? 'selected' : '' }}>Đang mở</option>
+                                                                <option value="0" {{ $exam->status == 0 ? 'selected' : '' }}>Đã đóng</option>
+                                                            </select>
                                                         </div>
 
-                                                    </td>
-                                                    <td>26 Aug 2023</td>
-                                                    <td>4673</td>
-
-                                                    <td>8,828
-                                                    </td>
-                                                    <td><span class="badge badge-warning-soft rounded-pill">Pending</span></td>
-                                                    <td>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="mailSix">
-                                                            <i data-feather="mail" class="icon-xs"></i>
-                                                            <div id="mailSix" class="d-none">
-                                                                <span>Mail</span>
-                                                            </div>
-                                                        </a>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="lockSix">
-                                                            <i data-feather="lock" class="icon-xs"></i>
-                                                            <div id="lockSix" class="d-none">
-                                                                <span>Block</span>
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <img src="../assets/images/avatar/avatar-7.jpg" alt="Image" class="avatar avatar-sm rounded-circle">
-                                                            <div class="ms-2">
-                                                                <h5 class="mb-0"><a href="#!" class="text-inherit">Rose Daniels</a></h5>
-                                                            </div>
+                                                        <div class="mb-3">
+                                                            <label for="image" class="form-label">Hình ảnh</label>
+                                                            <input type="file" class="form-control" id="image" name="image">
                                                         </div>
 
-                                                    </td>
-                                                    <td>19 Sept 2023</td>
-                                                    <td>435</td>
-
-                                                    <td>2,355
-                                                    </td>
-                                                    <td><span class="badge badge-success-soft rounded-pill">Paid</span></td>
-                                                    <td>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="mailSeven">
-                                                            <i data-feather="mail" class="icon-xs"></i>
-                                                            <div id="mailSeven" class="d-none">
-                                                                <span>Mail</span>
-                                                            </div>
-                                                        </a>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="lockSeven">
-                                                            <i data-feather="lock" class="icon-xs"></i>
-                                                            <div id="lockSeven" class="d-none">
-                                                                <span>Block</span>
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <img src="../assets/images/avatar/avatar-8.jpg" alt="Image" class="avatar avatar-sm rounded-circle">
-                                                            <div class="ms-2">
-                                                                <h5 class="mb-0"><a href="#!" class="text-inherit">Christian Hart</a></h5>
-                                                            </div>
+                                                        <div class="mb-3">
+                                                            <button type="submit" class="btn btn-primary">Cập nhật</button>
                                                         </div>
-
-                                                    </td>
-                                                    <td>19 Sept 2023</td>
-                                                    <td>67</td>
-
-                                                    <td>6,736
-                                                    </td>
-                                                    <td><span class="badge badge-success-soft rounded-pill">Paid</span></td>
-                                                    <td>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="mailEight">
-                                                            <i data-feather="mail" class="icon-xs"></i>
-                                                            <div id="mailEight" class="d-none">
-                                                                <span>Mail</span>
-                                                            </div>
-                                                        </a>
-                                                        <a
-                                                            href="#!"
-                                                            class="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                                            data-template="lockEight">
-                                                            <i data-feather="lock" class="icon-xs"></i>
-                                                            <div id="lockEight" class="d-none">
-                                                                <span>Block</span>
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-
-
-
-
-                                            </tbody>
-                                        </table>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="card-footer d-md-flex justify-content-between align-items-center  ">
-                                    <span>Showing <span class="text-dark">5</span> of <span class="text-dark">25</span> Results</span>
-                                    <nav>
-                                        <ul class="pagination  mb-0">
-                                            <li class="page-item disabled">
-                                                <a class="page-link " href="#!"><i class="mdi mdi-chevron-left"></i></a>
-                                            </li>
-                                            <li class="page-item active">
-                                                <a class="page-link " href="#!">1</a>
-                                            </li>
-                                            <li class="page-item">
-                                                <a class="page-link " href="#!">2</a>
-                                            </li>
-                                            <li class="page-item">
-                                                <a class="page-link " href="#!">3</a>
-                                            </li>
-                                            <li class="page-item">
-                                                <a class="page-link " href="#!"><i class="mdi mdi-chevron-right"></i></a>
-                                            </li>
-                                        </ul>
-                                    </nav>
+
+                                <!-- model xóa -->
+
+                                <!-- Xác nhận xóa Modal -->
+                                <div class="modal fade" id="deleteModal{{ $exam->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa{{ $exam->id }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Bạn có chắc chắn muốn xóa đề thi này không?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                <form id="deleteForm" action="{{ route('admin.exams.delete',$exam->id)}}" method="POST" style="display: inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
 
                 </div>
+                <div class="card-footer d-md-flex justify-content-between align-items-center  ">
+                    <nav>
+                        <ul class="pagination mb-0">
+                            <!-- Phần nút điều hướng trang -->
+                            <li class="page-item {{ $exams->onFirstPage() ? 'disabled' : '' }}">
+                                <a class="page-link" href="{{ $exams->previousPageUrl() }}"><i class="mdi mdi-chevron-left"></i></a>
+                            </li>
+
+                            @foreach ($exams->getUrlRange(1, $exams->lastPage()) as $page => $url)
+                            <li class="page-item {{ $page == $exams->currentPage() ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                            </li>
+                            @endforeach
+
+                            <li class="page-item {{ $exams->hasMorePages() ? '' : 'disabled' }}">
+                                <a class="page-link" href="{{ $exams->nextPageUrl() }}"><i class="mdi mdi-chevron-right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 @endsection
