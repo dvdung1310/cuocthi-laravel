@@ -39,7 +39,11 @@
                         @foreach ($new_news as $item)
                         <div class="sidebar-item d-flex">
                             <div class="sidebar-item-img">
-                               <a href="{{ route('tin-tuc.chi-tiet', ['news_slug' => $item->news_slug, 'news_id' => $item->news_id]) }}">
+                               <a href="{{ route('tin-tuc.chi-tiet', [
+                                            'category_slug' => $category_slug,
+                                            'news_slug' => $item->news_slug,
+                                            'news_id' => $item->news_id,
+                                        ]) }}">
                                 <img class="w-100" src="{{asset($item->news_avatar)}}" alt="{{$item->news_title}}">
                                </a>
                             </div>
@@ -64,19 +68,31 @@
                     <div class="col-md-3">
                         <div class="blog-item">
                             <div class="blog-img">
-                                <a href="{{ route('tin-tuc.chi-tiet', ['news_slug' => $item->news_slug, 'news_id' => $item->news_id]) }}">
+                                <a href="{{ route('tin-tuc.chi-tiet', [
+                                            'category_slug' => $item->category_slug,
+                                            'news_slug' => $item->news_slug,
+                                            'news_id' => $item->news_id,
+                                        ]) }}">
                                     <img class="w-100" src="{{asset($item->news_avatar)}}" alt="{{$item->news_title}}">
                                    </a>
                             </div>
                             <div class="blog-content">
                                 <p class="blog-date"><span>{{ $item->created_at->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y - H:i') }}</span></p>
-                                <a href="">
+                                <a href="{{ route('tin-tuc.chi-tiet', [
+                                             'category_slug' => $item->category_slug,
+                                            'news_slug' => $item->news_slug,
+                                            'news_id' => $item->news_id,
+                                        ]) }}">
                                     <p class="blog-name fw-bold">{{$item->news_title}}</p>
                                 </a>
-                                <a href="{{ route('tin-tuc.chi-tiet', ['news_slug' => $item->news_slug, 'news_id' => $item->news_id]) }}" class="blog-description">
-                                    {{-- <p class="blog-description"> --}}
+                                <a href="{{ route('tin-tuc.chi-tiet', [
+                                             'category_slug' => $item->category_slug,
+                                            'news_slug' => $item->news_slug,
+                                            'news_id' => $item->news_id,
+                                        ]) }}" class="blog-description">
+                                  
                                         {!!$item->news_description!!}
-                                    {{-- </p> --}}
+                             
                                 </a>
                             </div>
                         </div>

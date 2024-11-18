@@ -2,7 +2,7 @@
             <div class="h-100" data-simplebar>
                 <!-- Brand logo -->
                 <a class="navbar-brand" href="../index.html">
-                    <img src="../assets/images/brand/logo/logo-2.svg" alt="dash ui - bootstrap 5 admin dashboard template">
+                    <img src="{{ asset('assets/images/brand/logo/logo-2.svg') }}" alt="dash ui - bootstrap 5 admin dashboard template">
                 </a>
                 <!-- Navbar nav -->
                 <ul class="navbar-nav flex-column" id="sideNavbar">
@@ -13,7 +13,7 @@
                             data-bs-toggle="collapse" data-bs-target="#navDashboard" aria-expanded="false"
                             aria-controls="navDashboard">
                             <i data-feather="home" class="nav-icon me-2 icon-xxs"></i>
-                            Dashboard
+                            Thống kê
                         </a>
 
                         <div id="navDashboard" class="collapse "
@@ -68,34 +68,13 @@
                         </div>
 
                     </li>
-
-                    <!-- Nav item -->
-                    <li class="nav-item">
-                        <div class="navbar-heading">Apps</div>
-                    </li>
-                    <!-- Nav item -->
-                    <li class="nav-item">
-                        <a class="nav-link has-arrow "
-                            href="calendar.html">
-                            <i data-feather="calendar" class="nav-icon me-2 icon-xxs">
-                            </i> Calendar
-                        </a>
-                    </li>
-                    <!-- Nav item -->
-                    <li class="nav-item">
-                        <a class="nav-link has-arrow "
-                            href="chat-app.html">
-                            <i data-feather="message-square" class="nav-icon me-2 icon-xxs">
-                            </i> Chat
-                        </a>
-                    </li>
-                    <!-- Nav item -->
+                  
                     <li class="nav-item">
                         <a class="nav-link has-arrow  collapsed " href="#!"
                             data-bs-toggle="collapse" data-bs-target="#navecommerce" aria-expanded="false"
                             aria-controls="navecommerce">
-                            <i data-feather="shopping-cart" class="nav-icon me-2 icon-xxs">
-                            </i> Ecommerce
+                            <i data-feather="book" class="nav-icon me-2 icon-xxs">
+                            </i> Đề thi
                         </a>
 
                         <div id="navecommerce" class="collapse "
@@ -104,65 +83,8 @@
 
                                 <li class="nav-item">
                                     <a class="nav-link has-arrow "
-                                        href="ecommerce-products.html">
-
-                                        Products
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link has-arrow "
-                                        href="ecommerce-products-details.html">
-
-                                        Product Detail
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link has-arrow "
-                                        href="ecommerce-product-edit.html">
-
-                                        Add Product
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link has-arrow "
-                                        href="ecommerce-order-list.html">
-
-                                        Orders
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link has-arrow "
-                                        href="ecommerce-order-detail.html">
-
-                                        Orders Detail
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link has-arrow "
-                                        href="ecommerce-cart.html">
-
-                                        Shopping cart
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link has-arrow "
-                                        href="ecommerce-checkout.html">
-
-                                        Checkout
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link has-arrow "
-                                        href="ecommerce-customer.html">
-
-                                        Customer
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link has-arrow "
-                                        href="ecommerce-seller.html">
-
-                                        Seller
+                                        href="{{ route('admin.exams.index') }}">
+                                        Danh sách
                                     </a>
                                 </li>
                             </ul>
@@ -755,116 +677,25 @@
 
                     <li class="nav-item">
                         <a class="nav-link has-arrow  collapsed " href="#!"
-                            data-bs-toggle="collapse" data-bs-target="#navMenuLevel" aria-expanded="false"
-                            aria-controls="navMenuLevel">
-                            <i data-feather="corner-left-down" class="nav-icon me-2 icon-xxs">
-                            </i> Menu Level
+                            data-bs-toggle="collapse" data-bs-target="#contact" aria-expanded="false"
+                            aria-controls="contact">
+                            <i data-feather="users" class="nav-icon me-2 icon-xxs">
+                            </i> Cảm nhận
                         </a>
-                        <div id="navMenuLevel" class="collapse "
+
+                        <div id="contact" class="collapse"
                             data-bs-parent="#sideNavbar">
                             <ul class="nav flex-column">
+
                                 <li class="nav-item">
-                                    <a class="nav-link has-arrow " href="#!"
-                                        data-bs-toggle="collapse" data-bs-target="#navMenuLevelSecond" aria-expanded="false"
-                                        aria-controls="navMenuLevelSecond">
-                                        Two Level
+                                    <a class="nav-link has-arrow "
+                                        href="{{ route('admin.contacts.index') }}">
+                                        Danh sách
                                     </a>
-                                    <div id="navMenuLevelSecond" class="collapse" data-bs-parent="#navMenuLevel">
-                                        <ul class="nav flex-column">
-                                            <li class="nav-item">
-                                                <a class="nav-link " href="#!">
-                                                    NavItem 1</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link " href="#!">
-                                                    NavItem 2</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link has-arrow  collapsed  "
-                                        href="#!" data-bs-toggle="collapse" data-bs-target="#navMenuLevelThree"
-                                        aria-expanded="false" aria-controls="navMenuLevelThree">
-                                        Three Level
-                                    </a>
-                                    <div id="navMenuLevelThree"
-                                        class="collapse "
-                                        data-bs-parent="#navMenuLevel">
-                                        <ul class="nav flex-column">
-                                            <li class="nav-item">
-                                                <a class="nav-link  collapsed "
-                                                    href="#!" data-bs-toggle="collapse" data-bs-target="#navMenuLevelThreeOne"
-                                                    aria-expanded="false" aria-controls="navMenuLevelThreeOne">
-                                                    NavItem 1
-                                                </a>
-                                                <div id="navMenuLevelThreeOne"
-                                                    class="collapse collapse "
-                                                    data-bs-parent="#navMenuLevelThree">
-                                                    <ul class="nav flex-column">
-                                                        <li class="nav-item">
-                                                            <a class="nav-link "
-                                                                href="#!">
-                                                                NavChild Item 1
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link " href="#!">
-                                                    Nav Item 2</a>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </li>
                             </ul>
                         </div>
                     </li>
-
-                    <!-- Nav item -->
-                    <li class="nav-item">
-                        <div class="navbar-heading">Documentation</div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link has-arrow  collapsed " href="#!"
-                            data-bs-toggle="collapse" data-bs-target="#navDocs" aria-expanded="false"
-                            aria-controls="navDocs">
-                            <i data-feather="package" class="nav-icon me-2 icon-xxs">
-                            </i> Docs
-                        </a>
-                        <div id="navDocs" class="collapse "
-                            data-bs-parent="#sideNavbar">
-                            <ul class="nav flex-column">
-
-                                <li class="nav-item"><a href="../docs/index.html" class="nav-link  ">Introduction</a></li>
-                                <li class="nav-item"><a href="../docs/environment-setup.html" class="nav-link ">Environment setup</a></li>
-                                <li class="nav-item"><a href="../docs/working-with-gulp.html" class="nav-link  ">Working with Gulp</a>
-                                </li>
-                                <li class="nav-item"><a href="../docs/compiled-files.html" class="nav-link ">Compiled Files</a>
-                                </li>
-                                <li class="nav-item"><a href="../docs/file-structure.html" class="nav-link ">File Structure</a></li>
-                                <li class="nav-item"><a href="../docs/resources-assets.html" class="nav-link ">Resources & assets</a></li>
-                                <li class="nav-item"><a href="../docs/changelog.html" class="nav-link ">Changelog</a></li>
-
-
-                            </ul>
-                        </div>
-                    </li>
-
                 </ul>
-                <div class="card bg-light shadow-none text-center mx-4 my-8">
-                    <div class="card-body py-6">
-                        <img src="../assets/images/background/giftbox.png" alt="dash ui - admin dashboard template">
-                        <div class="mt-4">
-                            <h5>Unlimited Access</h5>
-                            <p class="fs-6 mb-4">
-                                Upgrade your plan from a Free trial, to select Business Plan. Start Now
-                            </p>
-                            <a href="#" class="btn btn-secondary btn-sm">Upgrade Now</a>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>

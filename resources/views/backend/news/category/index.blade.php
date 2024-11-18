@@ -34,6 +34,7 @@
                                     <tr>
                                         <th scope="col">STT</th>
                                         <th scope="col">Tên danh mục </th>
+                                        <th scope="col">Slug</th>
                                         <th scope="col">Trạng thái</th>
                                         <th scope="col">Tùy chọn</th>
                                     </tr>
@@ -43,6 +44,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $item->category_name }}</td>
+                                            <td>{{ $item->category_slug }}</td>
                                             <td>
                                                 @if ($item->category_status == 0)
                                                     <a href="{{ route('admin.active_category_news', $item->category_id) }}"><span
@@ -101,9 +103,8 @@
                                 placeholder="Nhập tên danh mục">
                         </div>
                         <div class="mb-3">
-                            <label for="category_slug" class="form-label">Tên danh mục</label>
-                            <input type="text" class="form-control" name="category_slug" id="category_slug"
-                                placeholder="Nhập tên danh mục">
+                            <label for="category_slug" class="form-label">Tên danh mục (Slug)</label>
+                            <input type="text" class="form-control" name="category_slug" id="category_slug" placeholder="Nhập tên danh mục">
                         </div>
                     </form>
                 </div>
@@ -117,66 +118,103 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+       $(document).ready(function() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Mở modal thêm mới danh mục
+    $('#btn_opent_modal').off('click').on('click', function() {
+        $('#addCategoryModal').modal('show');
+        $('#btn_update').hide();
+        $('#category_slug').val(''); // Xóa slug khi mở modal
+    });
+
+    // Chuyển tên danh mục thành slug
+    $('#category_name').on('input', function() {
+        var categoryName = $(this).val();
+        var slug = get_alias(categoryName);  // Chuyển đổi thành slug
+        $('#category_slug').val(slug);  // Điền slug vào trường category_slug
+    });
+
+    // Lưu danh mục mới
+    $('#btn_save').off('click').on('click', function() {
+        var category_name = $('#category_name').val();
+        var category_slug = $('#category_slug').val();
+
+        $.ajax({
+            url: "{{ route('admin.store_category_news') }}",
+            type: "POST",
+            data: {
+                category_name: category_name,
+                category_slug: category_slug,
+                _token: '{{ csrf_token() }}' // Thêm CSRF token
+            },
+            success: function(response) {
+                $('#addCategoryModal').modal('hide');
+                location.reload(); // Refresh trang sau khi lưu thành công
+            },
+            error: function(error) {
+                console.log('Cập nhật thất bại:', error);
+            }
+        });
+    });
+
+    // Sửa danh mục
+    $('.btn_edit').on('click', function() {
+        var categoryId = $(this).data('id');
+        var categoryName = $(this).data('name');
+        var categorySlug = $(this).data('slug');
+        
+        $('#category_name').val(categoryName);
+        $('#category_slug').val(categorySlug);  // Điền slug vào modal khi sửa
+        $('#category_id').val(categoryId);
+        
+        $('#addCategoryModal').modal('show');
+        $('#btn_save').hide();
+        
+        $('#btn_update').off('click').on('click', function() {
+            var category_id = $('#category_id').val();
+            var category_name = $('#category_name').val();
+            var category_slug = $('#category_slug').val();
+            
+            $.ajax({
+                url: "{{ route('admin.update_category_news') }}", 
+                type: "POST",
+                data: {
+                    category_id: category_id,
+                    category_name: category_name,
+                    category_slug: category_slug,
+                    _token: '{{ csrf_token() }}' 
+                },
+                success: function(response) {
+                    $('#addCategoryModal').modal('hide');
+                    location.reload(); 
+                },
+                error: function(error) {
+                    console.log('Cập nhật thất bại:', error);
                 }
             });
-            $('#btn_opent_modal').off('click').on('click', function() {
-                $('#addCategoryModal').modal('show');
-                $('#btn_update').hide();
-            })
-            $('#btn_save').off('click').on('click', function() {
-                // Lấy giá trị từ input
-                var category_name = $('#category_name').val();
-
-                $.ajax({
-                    url: "{{ route('admin.store_category_news') }}",
-                    type: "POST",
-                    data: {
-                        category_name: category_name,
-                        _token: '{{ csrf_token() }}' // Thêm CSRF token
-                    },
-                    success: function(response) {
-                        $('#addCategoryModal').modal('hide');
-                        location.reload(); // Refresh trang sau khi cập nhật thành công
-                    },
-                    error: function(error) {
-                        console.log('Cập nhật thất bại:', error);
-                    }
-                });
-            });
-
-            $('.btn_edit').on('click', function() {
-                // Lấy dữ liệu từ các thuộc tính data
-                var categoryId = $(this).data('id');
-                var categoryName = $(this).data('name');
-                $('#category_name').val(categoryName);
-                $('#category_id').val(categoryId);
-                $('#addCategoryModal').modal('show');
-                $('#btn_save').hide();
-                $('#btn_update').off('click').on('click', function() {
-                    var category_id = $('#category_id').val();
-                    var category_name = $('#category_name').val();
-                    $.ajax({
-                        url: "{{ route('admin.update_category_news') }}", 
-                        type: "POST",
-                        data: {
-                            category_id: category_id,
-                            category_name: category_name,
-                            _token: '{{ csrf_token() }}' 
-                        },
-                        success: function(response) {
-                            $('#addCategoryModal').modal('hide');
-                            location.reload(); 
-                        },
-                        error: function(error) {
-                            console.log('Cập nhật thất bại:', error);
-                        }
-                    });
-                });
-            });
         });
+    });
+
+    // Hàm chuyển đổi tên thành slug
+    function get_alias(str) {
+        str = str.toLowerCase();
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y");
+        str = str.replace(/đ/g,"d");
+        str = str.replace(/!|@|\$|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\'| |\"|\&|\#|\[|\]|~/g,"-");
+        str = str.replace(/-+-/g,"-"); //thay thế 2- thành 1-
+        str = str.replace(/"'^\-+|\-+$/g,""); //cắt bỏ ký tự - ở đầu và cuối chuỗi
+        return str;
+    }
+});
     </script>
 @endsection
