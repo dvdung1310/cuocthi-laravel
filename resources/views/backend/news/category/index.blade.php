@@ -100,6 +100,11 @@
                             <input type="text" class="form-control" name="category_name" id="category_name"
                                 placeholder="Nhập tên danh mục">
                         </div>
+                        <div class="mb-3">
+                            <label for="category_slug" class="form-label">Tên danh mục</label>
+                            <input type="text" class="form-control" name="category_slug" id="category_slug"
+                                placeholder="Nhập tên danh mục">
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
