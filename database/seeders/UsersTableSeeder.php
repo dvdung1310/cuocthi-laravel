@@ -13,14 +13,14 @@ class UsersTableSeeder extends Seeder
         // Tạo 2 người dùng
         User::create([
             'name' => 'Nguyễn Văn A',
-            'email' => 'usera@example.com',
-            'password' => Hash::make('password123'),  
+            'email' => 'dungconmetheu@gmail.com',
+            'password' => Hash::make('123'),  
         ]);
 
         User::create([
             'name' => 'Nguyễn Văn B',
-            'email' => 'userb@example.com',
-            'password' => Hash::make('password123'),  
+            'email' => 'dung@gmail.com',
+            'password' => Hash::make('123'),  
         ]);
     }
 }

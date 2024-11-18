@@ -21,21 +21,17 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // Kiểm tra dữ liệu
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:6',
+            'password' => 'required|min:1',
         ]);
 
         // Đăng nhập người dùng
         if (Auth::attempt($credentials)) {
-            // Đăng nhập thành công, chuyển hướng đến dashboard
             return redirect()->route('admin.dashboard');
         }
 
         // Đăng nhập không thành công, quay lại với thông báo lỗi
-        return back()->withErrors([
-            'email' => 'Thông tin đăng nhập không chính xác.',
-        ]);
+        return back()->with('error', 'Thông tin đăng nhập không chính xác');
     }
 }

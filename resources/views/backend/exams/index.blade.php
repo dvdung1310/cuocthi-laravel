@@ -84,9 +84,9 @@
             <div class="card h-100">
                 <div class="card-header d-md-flex justify-content-between align-items-center">
 
-                    <form>
+                    <form class="d-none">
                         <div class="mb-3 mb-md-0">
-                            <input type="search" class="form-control" placeholder="Search Author">
+                            <input type="search" class="form-control" placeholder="Tìm kiếm bài thi">
                         </div>
                     </form>
                 </div>
@@ -95,7 +95,7 @@
                         <table class="table mb-0 text-nowrap table-centered">
                             <thead class="table-light">
                                 <tr>
-                                    <th scope="col">Id đề</th>
+                                    <th scope="col">STT</th>
                                     <th scope="col">Tên đề thi</th>
                                     <th scope="col">Hình ảnh</th>
                                     <th scope="col">Ngày bắt đầu</th>
@@ -105,9 +105,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($exams as $exam)
+                                @foreach ($exams as $key=>$exam)
                                 <tr>
-                                    <td>{{ $exam->id }}</td>
+                                    <td>{{ $key+1 }}</td>
                                     <td>{{ $exam->name }}</td>
                                     <td>
                                         <div class="d-flex align-items-center">
@@ -127,6 +127,12 @@
                                         </span>
                                     </td>
                                     <td>
+
+                                        <a href="{{ route('admin.questions.index',['exam'=>$exam->id]) }}" class="btn btn-ghost btn-icon btn-sm rounded-circle">
+                                            <i data-feather="eye" class="icon-xs"></i>
+                                        </a>
+                                        
+
                                         <button class="btn btn-ghost btn-icon btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#editExamModal{{ $exam->id }}">
                                             <i data-feather="edit" class="icon-xs"></i>
                                         </button>

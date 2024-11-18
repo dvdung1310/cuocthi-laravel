@@ -12,7 +12,6 @@ class ExamController extends Controller
 {
     public function store(Request $request)
     {
-        // Validate dữ liệu nhập vào
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -68,13 +67,13 @@ class ExamController extends Controller
         $exam->status = $request->status;
 
         $imagePath = $exam->image;
-            if ($request->hasFile('image')) {
-                if ($exam->image) {
-                    Storage::disk('public')->delete($exam->image);
-                }
-                $imagePath = $request->file('image')->store('exams', 'public');
-                $exam->image = $imagePath;
+        if ($request->hasFile('image')) {
+            if ($exam->image) {
+                Storage::disk('public')->delete($exam->image);
             }
+            $imagePath = $request->file('image')->store('exams', 'public');
+            $exam->image = $imagePath;
+        }
 
         $exam->save();
 
@@ -84,7 +83,7 @@ class ExamController extends Controller
     // Function để xóa exam
     public function destroy($id)
     {
-        $exam = Exam::findOrFail($id); 
+        $exam = Exam::findOrFail($id);
         if ($exam->image) {
             Storage::disk('public')->delete($exam->image);
         }
